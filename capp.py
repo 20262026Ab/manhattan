@@ -5,7 +5,27 @@ import plotly.graph_objects as go
 from datetime import date, datetime
 
 st.set_page_config(page_title="Budget Planner", layout="wide")
+# --- ŞİFRE KONTROLÜ BAŞLANGIÇ ---
+def check_password():
+    def password_entered():
+        if st.session_state["password"] == st.secrets["password"]:
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]
+        else:
+            st.session_state["password_correct"] = False
 
+    if "password_correct" not in st.session_state:
+        st.text_input("Şifre", type="password", on_change=password_entered, key="password")
+        return False
+    elif not st.session_state["password_correct"]:
+        st.text_input("Şifre", type="password", on_change=password_entered, key="password")
+        st.error("❌ Yanlış şifre.")
+        return False
+    return True
+
+if not check_password():
+    st.stop()  # Şifre girilmeden alt taraf yüklenmez
+# --- ŞİFRE KONTROLÜ BİTİŞ ---
 # ─────────────────────────────────────────────────────────────────────────────
 # SABİTLER
 # ─────────────────────────────────────────────────────────────────────────────
